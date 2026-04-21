@@ -1,11 +1,19 @@
 import { auth } from "@/auth";
-import { HomeContent } from "@/components/home-content";
-import { getRandomCats } from "@/lib/cat-api";
+import { SearchContent } from "@/components/search-content";
+import { getCatById } from "@/lib/cat-api";
 import { FAVORITE_DATABASE_ERROR } from "@/lib/favorite-error-message";
 import { getFavoriteIdsByUserId } from "@/lib/favorites";
 
-export default async function HomePage() {
-  const [session, cats] = await Promise.all([auth(), getRandomCats(6)]);
+type SearchPageProps = {
+  searchParams: Promise<{
+    id?: string;
+  }>;
+};
+
+export default async function SearchPage({ searchParams }: SearchPageProps) {
+  const params = await searchParams;
+  const id = params.id?.trim() || "";
+  const session = await auth();
   let favoriteMessage = "";
   let favoriteIds: string[] = [];
 
@@ -18,11 +26,14 @@ export default async function HomePage() {
     }
   }
 
+  const cat = id ? await getCatById(id) : null;
+
   return (
-    <HomeContent
-      initialCats={cats}
+    <SearchContent
+      initialCat={cat}
       initialFavoriteIds={favoriteIds}
       initialMessage={favoriteMessage}
+      initialQuery={id}
       isLoggedIn={Boolean(session?.user?.id)}
     />
   );
