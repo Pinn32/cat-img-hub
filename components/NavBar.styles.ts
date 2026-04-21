@@ -47,8 +47,8 @@ export const NavButton = styled.button`
     font-weight: bold;
     padding: 0.6rem 1rem;
     border-radius: 999px;
-    background: #8e6343;
-    border: 2px solid #684315;
+    background: #e68d4b;
+    border: 2px solid #c1771c;
     color: white;
     cursor: pointer;
 `;
