@@ -1,3 +1,6 @@
+// Member: Yuchen Bao
+// CatCard component
+
 import {
   Card,
   CardBody,
@@ -5,7 +8,7 @@ import {
   CardImage,
   InfoLine,
   Label,
-} from "@/components/cat-card.styles";
+} from "@/components/CatCard.styles";
 import type { CatCardData } from "@/lib/types";
 
 type CatCardProps = {
@@ -17,8 +20,10 @@ type CatCardProps = {
 export function CatCard({ cat, buttonText, onButtonClick }: CatCardProps) {
   return (
     <Card>
+      {/* cat img */}
       <CardImage src={cat.imageUrl} alt={cat.breed} />
       <CardBody>
+        {/* cat info */}
         <InfoLine>
           <Label>Breed:</Label> {cat.breed}
         </InfoLine>
@@ -31,6 +36,7 @@ export function CatCard({ cat, buttonText, onButtonClick }: CatCardProps) {
         <InfoLine>
           <Label>ID:</Label> {cat.id}
         </InfoLine>
+        {/* like button */}
         <CardButton type="button" onClick={() => onButtonClick(cat)}>
           {buttonText}
         </CardButton>

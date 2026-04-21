@@ -1,9 +1,12 @@
+// Member: Tianpeng Xu
+// Favorites page content
+
 "use client";
 
 import { useState } from "react";
-import { CatCard } from "@/components/cat-card";
-import { Grid } from "@/components/cat-card.styles";
-import { Hero, Message, PageShell, Text, Title } from "@/components/page-shell.styles";
+import { CatCard } from "@/components/CatCard";
+import { Grid } from "@/components/CatCard.styles";
+import { Hero, Message, Main, Text, Title } from "@/components/Main.styles";
 import type { CatCardData } from "@/lib/types";
 
 type FavoritesContentProps = {
@@ -15,19 +18,22 @@ export function FavoritesContent({
   initialCats,
   initialMessage,
 }: FavoritesContentProps) {
+  // states for favorite cats list
   const [cats, setCats] = useState(initialCats);
   const [message, setMessage] = useState(initialMessage);
 
+  // remove a cat from favorites
   async function handleRemove(cat: CatCardData) {
     try {
+      // delete cat entry from mongodb
       const response = await fetch(`/api/favorites?id=${cat.id}`, {
         method: "DELETE",
       });
-
       if (!response.ok) {
-        throw new Error("Failed to remove favorite.");
+        setMessage("Failed to remove favorite.");
+        return;
       }
-
+      // update state & ui
       setCats((current) => current.filter((item) => item.id !== cat.id));
       setMessage("Removed from favorites.");
     } catch {
@@ -36,17 +42,20 @@ export function FavoritesContent({
   }
 
   return (
-    <PageShell>
+    <Main>
       <Hero>
         <Title>Your Favorite Cats</Title>
         <Text>Only your own favorites are shown here.</Text>
       </Hero>
 
+      {/* status / feedback message */}
       {message ? <Message>{message}</Message> : null}
 
+      {/* empty state / liked cat list */}
       {cats.length === 0 ? (
         <Message>No favorite cats yet.</Message>
       ) : (
+        // grid layout for cat cards
         <Grid>
           {cats.map((cat) => (
             <CatCard
@@ -58,6 +67,6 @@ export function FavoritesContent({
           ))}
         </Grid>
       )}
-    </PageShell>
+    </Main>
   );
 }

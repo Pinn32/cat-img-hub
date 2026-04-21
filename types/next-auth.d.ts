@@ -1,3 +1,6 @@
+// Member: Aiqi Xu
+// Auth.js interfaces
+
 import "next-auth";
 import "next-auth/jwt";
 

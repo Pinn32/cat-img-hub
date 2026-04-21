@@ -1,3 +1,6 @@
+// Member: Yuchen Bao
+// Cat API utilities
+
 import type { CatCardData } from "@/lib/types";
 
 type CatApiBreed = {
@@ -14,6 +17,7 @@ type CatApiImage = {
 
 const CAT_API_BASE_URL = "https://api.thecatapi.com/v1";
 
+// define request headers for the cat api
 function getHeaders() {
   if (!process.env.THE_CAT_API_KEY) {
     return undefined;
@@ -24,6 +28,7 @@ function getHeaders() {
   };
 }
 
+// map raw api image to card
 function mapCat(image: CatApiImage): CatCardData {
   const breed = image.breeds?.[0];
 
@@ -36,12 +41,14 @@ function mapCat(image: CatApiImage): CatCardData {
   };
 }
 
+// fetch one single cat img by id
 async function fetchCatImageById(id: string) {
   const response = await fetch(`${CAT_API_BASE_URL}/images/${id}`, {
     headers: getHeaders(),
     cache: "no-store",
   });
 
+  // 404 not found
   if (response.status === 404) {
     return null;
   }
@@ -53,6 +60,7 @@ async function fetchCatImageById(id: string) {
   return (await response.json()) as CatApiImage;
 }
 
+// fetch a batch of random cats
 export async function getRandomCats(limit = 6) {
   const response = await fetch(
     `${CAT_API_BASE_URL}/images/search?limit=${limit}&has_breeds=1`,
@@ -68,7 +76,7 @@ export async function getRandomCats(limit = 6) {
 
   const data = (await response.json()) as CatApiImage[];
 
-  const completedCats = await Promise.all(
+  return await Promise.all(
     data.map(async (image) => {
       if (image.breeds?.length) {
         return mapCat(image);
@@ -79,10 +87,9 @@ export async function getRandomCats(limit = 6) {
       return mapCat(fullImage || image);
     }),
   );
-
-  return completedCats;
 }
 
+// fetch cat data by id
 export async function getCatById(id: string) {
   const data = await fetchCatImageById(id);
 

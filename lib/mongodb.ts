@@ -1,9 +1,14 @@
+// Member: Tianpeng Xu
+// MongoDB connection utilities
+
 import { MongoClient } from "mongodb";
 
-declare global {
-  var _mongoClientPromise: Promise<MongoClient> | undefined;
-}
+// extend global scope to cache MongoDB client in development
+const globalWithMongo = globalThis as typeof globalThis & {
+  _mongoClientPromise?: Promise<MongoClient>;
+};
 
+// creates and connects a new MongoDB client
 function createMongoClientPromise() {
   const uri = process.env.MONGODB_URI;
 
@@ -16,26 +21,29 @@ function createMongoClientPromise() {
   return client.connect();
 }
 
+// returns a cached MongoDB client in development or a new one in production;
+// prevents multiple connections during hot reload.
 function getMongoClientPromise() {
   if (process.env.NODE_ENV === "development") {
-    if (!global._mongoClientPromise) {
+    if (!globalWithMongo._mongoClientPromise) {
       const clientPromise = createMongoClientPromise().catch((error) => {
-        if (global._mongoClientPromise === clientPromise) {
-          global._mongoClientPromise = undefined;
+        if (globalWithMongo._mongoClientPromise === clientPromise) {
+          globalWithMongo._mongoClientPromise = undefined;
         }
 
         throw error;
       });
 
-      global._mongoClientPromise = clientPromise;
+      globalWithMongo._mongoClientPromise = clientPromise;
     }
 
-    return global._mongoClientPromise;
+    return globalWithMongo._mongoClientPromise;
   }
 
   return createMongoClientPromise();
 }
 
+// returns a connected MongoDB database instance
 export async function getMongoDatabase() {
   const connectedClient = await getMongoClientPromise();
 

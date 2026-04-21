@@ -1,41 +1,41 @@
+// Member: Aiqi Xu
+// Login page styled components
+
 "use client";
 
 import styled from "styled-components";
 
 export const LoginWrap = styled.main`
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 48px 20px;
+    width: clamp(100px, 500px, 80vw);
+    margin: 0 auto;
+    padding: 3rem 1.2rem;
 `;
 
 export const LoginCard = styled.section`
-  padding: 32px;
-  border-radius: 24px;
-  background: #fff;
-  border: 1px solid #ead9c3;
-  box-shadow: 0 18px 40px rgba(115, 77, 43, 0.12);
+    padding: 2rem;
+    border-radius: 24px;
+    background: #ffffff;
+    border: 1px solid #ead9c3;
+    box-shadow: 0 12px 32px #e8d5c2;
 `;
 
 export const LoginTitle = styled.h1`
-  font-size: 32px;
-  color: #6d4125;
+    font-size: 2rem;
+    color: #6d4125;
 `;
 
 export const LoginText = styled.p`
-  margin-top: 12px;
-  font-size: 16px;
-  line-height: 1.6;
-  color: #5d4637;
+    margin-top: 0.5rem;
+    color: #5d4637;
 `;
 
 export const LoginButton = styled.button`
-  margin-top: 20px;
-  padding: 14px 18px;
-  border: none;
-  border-radius: 14px;
-  background: #7a4b2a;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
+    margin-top: 1.2rem;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 14px;
+    background: #7a4b2a;
+    font-size: 1rem;
+    color: white;
+    cursor: pointer;
 `;

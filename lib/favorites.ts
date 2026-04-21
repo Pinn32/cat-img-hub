@@ -1,8 +1,12 @@
+// Member: Tianpeng Xu
+// favorites & mongodb utilities
+
 import { getMongoDatabase } from "@/lib/mongodb";
 import type { CatCardData, FavoriteDocument } from "@/lib/types";
 
 const COLLECTION_NAME = "favorites";
 
+// get all liked cat for authorized user
 export async function getFavoritesByUserId(userId: string) {
   const database = await getMongoDatabase();
 
@@ -21,12 +25,15 @@ export async function getFavoritesByUserId(userId: string) {
   }));
 }
 
+// get only id of favorite cats
 export async function getFavoriteIdsByUserId(userId: string) {
   const favorites = await getFavoritesByUserId(userId);
 
   return favorites.map((favorite) => favorite.id);
 }
 
+
+// add a cat to user's favorite
 export async function addFavorite(userId: string, cat: CatCardData) {
   const database = await getMongoDatabase();
   const collection = database.collection<FavoriteDocument>(COLLECTION_NAME);
@@ -41,6 +48,7 @@ export async function addFavorite(userId: string, cat: CatCardData) {
   }
 }
 
+// remove a cat from user's favorites.
 export async function removeFavorite(userId: string, catId: string) {
   const database = await getMongoDatabase();
 
