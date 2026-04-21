@@ -31,7 +31,7 @@ export const Text = styled.p`
     color: #5d4637;
 `;
 
-// refresh & go-to-login
+// refresh & go-to-login & search, etc
 export const MainButton = styled.button`
     display: inline-block;
     margin: 0 0 1.2rem;
@@ -69,9 +69,10 @@ export const SearchForm = styled.form`
 
 export const SearchInput = styled.input`
     flex: 1;
+    margin: 0 0 1.2rem;
     padding: 0.8rem 1rem;
     border-radius: 12px;
     border: 1px solid #d8c0a2;
     background: #fffdf9;
-    font-size: 0.9rem;
+    font-size: 1rem;
 `;
