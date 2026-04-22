@@ -1,4 +1,4 @@
-// Member: Yuchen Bao
+// Member: Yuchen Bao, Aiqi Xu, Tianpeng Xu
 // Home page content
 
 "use client";
@@ -45,13 +45,29 @@ export function HomeContent({
     setMessage("");
 
     try {
-      const response = await fetch("/api/cats/random?limit=6", {
+      const response = await fetch("/api/cats/random?limit=12", {
         cache: "no-store",
       });
-      const data = (await response.json()) as { cats: CatCardData[] };
+      const data = (await response.json()) as {
+        cats?: CatCardData[];
+        message?: string;
+      };
+
+      if (!response.ok) {
+        setCats([]);
+        throw new Error(data.message || "Failed to refresh cats.");
+      }
+
+      if (!data.cats) {
+        setCats([]);
+        throw new Error("Failed to refresh cats.");
+      }
+
       setCats(data.cats);
-    } catch {
-      setMessage("Failed to refresh cats.");
+    } catch (error) {
+      setMessage(
+        error instanceof Error ? error.message : "Failed to refresh cats.",
+      );
     } finally {
       setLoading(false);
     }
@@ -73,7 +89,16 @@ export function HomeContent({
       </MainButton>
 
       {/* system message: error or feedback */}
-      {message ? <Message>{message}</Message> : null}
+      {message ? (
+        <Message>
+          {message.split("\n").map((line, index, lines) => (
+            <span key={`${line}-${index}`}>
+              {line}
+              {index < lines.length - 1 ? <br /> : null}
+            </span>
+          ))}
+        </Message>
+      ) : null}
 
       {/* render cat gallery */}
       <Grid>

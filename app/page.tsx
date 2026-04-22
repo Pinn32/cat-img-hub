@@ -8,11 +8,17 @@ import { FAVORITE_DATABASE_ERROR } from "@/lib/favorite-error-message";
 import { getFavoriteIdsByUserId } from "@/lib/favorites";
 
 export default async function HomePage() {
-  // get 6 random cats
-  const [session, cats] = await Promise.all([auth(), getRandomCats(6)]);
+  // get 12 random cats
+  const [session, catsResult] = await Promise.all([
+    auth(),
+    getRandomCats().catch((error) => {
+      return error instanceof Error ? error.message : "Failed to fetch cats.";
+    }),
+  ]);
+  const cats = typeof catsResult === "string" ? [] : catsResult;
 
   // init variables to handle favorite status
-  let favoriteMessage = "";
+  let favoriteMessage = typeof catsResult === "string" ? catsResult : "";
   let favoriteIds: string[] = [];
 
   // handle favorite status
